@@ -1,6 +1,9 @@
 // Creates an express-session that records the user (Sent as JSON {user: "Name"} in req.body)
 // Records the URL visited if either foo, bar or show
 
+// Modify this is use basic-auth (instead of express-basic-auth) to allow for
+// pass back of user details when authorised?
+
 // Load in .env file with details of users / secrets to be hidden
 require('dotenv').config();
 
@@ -9,7 +12,7 @@ var cors = require('cors')
 var express = require('express');
 var parseurl = require('parseurl');
 var session = require('express-session');
-var basicAuth = require('express-basic-auth');
+var basicAuth = require('basic-auth');
 var mongodb = require('mongodb').MongoClient;
 var ObjectID = require('mongodb').ObjectID;
 
