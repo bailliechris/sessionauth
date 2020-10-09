@@ -14,7 +14,7 @@ var mongodb = require('mongodb').MongoClient;
 var ObjectID = require('mongodb').ObjectID;
 
 // Get user details from the user file
-const users = require('./utility/user');
+//const users = require('./utility/user');
 
 //Connect to MONGODB Get whole document
 async function loadCollection() {

@@ -1,9 +1,6 @@
 // Creates an express-session that records the user (Sent as JSON {user: "Name"} in req.body)
 // Records the URL visited if either foo, bar or show
 
-// Modify this is use basic-auth (instead of express-basic-auth) to allow for
-// pass back of user details when authorised?
-
 // Load in .env file with details of users / secrets to be hidden
 require('dotenv').config();
 
@@ -12,12 +9,12 @@ var cors = require('cors')
 var express = require('express');
 var parseurl = require('parseurl');
 var session = require('express-session');
-var basicAuth = require('basic-auth');
+var basicAuth = require('express-basic-auth');
 var mongodb = require('mongodb').MongoClient;
 var ObjectID = require('mongodb').ObjectID;
 
 // Get user details from the user file
-const users = require('./utility/user');
+//const users = require('./utility/user');
 
 //Connect to MONGODB Get whole document
 async function loadCollection() {
@@ -46,7 +43,7 @@ async function checkUser(username, password, cb) {
     console.log(result);
  
     if (result.length > 0)
-        return cb(null, true)
+        return cb(null, true, result)
     else
         return cb(null, false)
 }
@@ -122,10 +119,18 @@ app.get('/', function (req, res, next) {
 
 // Login route using jsonbody basic auth
 // Currently using log middleware logging everything for test purposes
+
+// Improved to record entered username in the session and redirect
 app.post('/login', log, jsonBodyAuth, function (req, res, next) {
-    req.session.user = req.body.user;
-    res.status(200).send("Logged In!" + req.body.user + req.auth.username);
+    req.session.user = req.auth.user;
+    res.status(200);
+    res.redirect('/user');
 });
+
+// Returns users details if logged in - 
+app.get('/user', checkSession, function (req, res, next) {
+    res.status(200).send("Logged In!" + " " + req.session.user);
+})
 
 // Protected route - check with session
 app.get('/foo', checkSession, function (req, res, next) {
