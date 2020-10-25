@@ -134,7 +134,7 @@ app.get('/user', checkSession, function (req, res, next) {
 
 // Protected route - check with session
 app.get('/foo', checkSession, function (req, res, next) {
-    res.send("You're still logged in!" + req.session.user);
+    res.send("You're still logged in!" + " " + req.session.user);
 })
 
 // Logout endpoint - logs everyone out?
